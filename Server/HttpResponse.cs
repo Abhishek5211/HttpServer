@@ -5,8 +5,8 @@ namespace Server.Http
 {
     public sealed class HttpResponse
     {
-        public int StatusCode { get; init; }
-        public string ReasonPhrase { get; init; } = "OK";
+        public int StatusCode { get; set; }
+        public string ReasonPhrase { get; set; } = "OK";
         public Dictionary<string, string> Headers { get; } = new(StringComparer.OrdinalIgnoreCase);
         public byte[] Body { get; init; } = Array.Empty<byte>();
 
@@ -35,3 +35,5 @@ namespace Server.Http
         }
     }
 }
+
+

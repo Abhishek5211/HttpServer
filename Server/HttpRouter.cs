@@ -1,4 +1,8 @@
-// Server/Http/Router.cs
+
+using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace Server.Http
 {
     public sealed class Router
@@ -29,6 +33,18 @@ namespace Server.Http
             => _routes.TryGetValue((method, path), out var h) ? h : NotFound;
 
         private static ValueTask<HttpResponse> NotFound(HttpRequest req)
-            => new(HttpResponse.OkText("Not Found", keepAlive: req.KeepAlive) { StatusCode = 404, ReasonPhrase = "Not Found" });
+        {
+            var body = Encoding.UTF8.GetBytes("Not Found");
+            var resp = new HttpResponse
+            {
+                StatusCode = 404,
+                ReasonPhrase = "Not Found",
+                Body = body
+            };
+            resp.Headers["Content-Type"] = "text/plain; charset=utf-8";
+            resp.Headers["Content-Length"] = body.Length.ToString();
+            resp.Headers["Connection"] = req.KeepAlive ? "keep-alive" : "close";
+            return new ValueTask<HttpResponse>(resp);
+        }
     }
 }

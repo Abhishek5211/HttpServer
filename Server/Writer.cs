@@ -1,4 +1,4 @@
-// Server/Http/Writer.cs
+
 using System.Net.Sockets;
 using System.Text;
 
@@ -25,7 +25,7 @@ namespace Server.Http
             }
 
             // Try a single gather write using SendAsync(ReadOnlyMemory<byte>[])
-            var segments = new ReadOnlyMemory<byte>[] { headerBytes, resp.Body };
+            var segments = Encoding.ASCII.GetBytes(headerBytes.ToString() + resp.Body.ToString());
             await socket.SendAsync(segments, SocketFlags.None, ct);
         }
     }
